@@ -42,7 +42,10 @@ public class Run {
             }
 
             if (string[j].equals("-O") || string[j].equals("--output")) {
-                requestInformation.setResponseFileAddress(string[j + 1]);
+                if (string.length == (j + 1))
+                    requestInformation.setResponseFileAddress("-");
+                else
+                    requestInformation.setResponseFileAddress(string[j + 1]);
                 saveResponseFlag = true;
             }
         }
@@ -70,9 +73,10 @@ public class Run {
         System.out.println("-i   , \t\t\t\t : show response headers");
         System.out.println("-M <>, --method <> \t : set method \t [--method GET]");
         System.out.println("-H <>, --header <> \t : set headers \t [--header \"key1:value1&key2:value2\"]");
-        System.out.println("-d <>, --data <> \t : set message body in form-data \t [--data \"key1:value1&key2:value2\"]]");
+        System.out.println("-d <>, --data <> \t : set message body in form-data \t [--data \"key1:value1&key2:value2\"]");
         System.out.println("\t , --upload <> \t : set message body with uploaded file \t [--upload E:\\MidTermTest\\note.txt]");
-        System.out.println("-O <>, --output <> \t : save response body in entered file \t [--output E:\\MidTermTest\\note.png]]");
+        System.out.println("-O <>, --output <> \t : save response body in entered file \t [--output E:\\MidTermTest\\note.png]" +
+                            "\n \t\t\t\t\t   if you not enter file name, it will save in file with default name");
 
     }
 }

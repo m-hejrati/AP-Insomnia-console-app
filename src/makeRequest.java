@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,8 +102,19 @@ public class makeRequest {
             StringBuilder response = new StringBuilder();
 
             OutputStream os = null;
-            if (responseFileAddress != null)
-                os = new FileOutputStream(responseFileAddress);
+            if (responseFileAddress != null) {
+                if (responseFileAddress.charAt(0) != '-')
+                    os = new FileOutputStream(responseFileAddress);
+
+                else {
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDateTime now = LocalDateTime.now(); // get date of system
+                    String date = dtf.format(now);
+
+                    String address = "output_" + date;
+                    os = new FileOutputStream(address);
+                }
+            }
 
             byte[] buffer = new byte[1024];
             int byteReaded = is.read(buffer);
@@ -123,8 +136,8 @@ public class makeRequest {
                 os.close();
 
         } catch (IOException e) {
-//            e.printStackTrace();
-            System.err.println("Impossible to save response.");
+            e.printStackTrace();
+//            System.err.println("Impossible to save response.");
         }
 
     }
