@@ -43,7 +43,7 @@ public class makeRequest {
         switch (myRequest.getMethod()) {
             case "GET":
             case "DELETE":
-                getResponse(connection, myResponse);
+                getResponse(connection, myResponse, myRequest.getResponseFileAddress());
                 break;
 
             case "POST":
@@ -51,11 +51,11 @@ public class makeRequest {
 
                     if (myRequest.getBodyMethod().equals("--data")) {
                         sendFormData(connection, myRequest.getBody());
-                        getResponse(connection, myResponse);
+                        getResponse(connection, myResponse, myRequest.getResponseFileAddress());
 
                     } else if (myRequest.getBodyMethod().equals("--upload")) {
-                        sendPOSTUploadBinary(connection, myRequest.getFileAddress());
-                        getResponse(connection, myResponse);
+                        sendPOSTUploadBinary(connection, myRequest.getFileLoadAddress());
+                        getResponse(connection, myResponse, myRequest.getResponseFileAddress());
                     }
                 } else {
                     System.err.println("Please Enter body method");
@@ -66,7 +66,7 @@ public class makeRequest {
                 if (myRequest.getBodyMethod() != null) {
 
                     sendFormData(connection, myRequest.getBody());
-                    getResponse(connection, myResponse);
+                    getResponse(connection, myResponse, myRequest.getResponseFileAddress());
 
                 } else {
                     System.err.println("Please Enter body method");
@@ -80,7 +80,7 @@ public class makeRequest {
         return myResponse;
     }
 
-    public void getResponse(HttpURLConnection connection, Response myResponse) {
+    public void getResponse(HttpURLConnection connection, Response myResponse, String responseFileAddress) {
 
         try {
             myResponse.setResponseCode(connection.getResponseCode());
@@ -93,16 +93,35 @@ public class makeRequest {
             e.printStackTrace();
         }
 
-        try (BufferedReader in = new BufferedReader(
-                new InputStreamReader(connection.getInputStream()))) {
+        try {
 
-            String line;
+            InputStream is = connection.getInputStream();
+
             StringBuilder response = new StringBuilder();
 
-            while ((line = in.readLine()) != null)
-                response.append(line);
+            OutputStream os = null;
+            if (responseFileAddress != null)
+                os = new FileOutputStream(responseFileAddress);
 
+            byte[] buffer = new byte[1024];
+            int byteReaded = is.read(buffer);
+            while (byteReaded != -1) {
+
+                if (os != null)
+                    os.write(buffer, 0, byteReaded);
+
+                for (byte b : buffer)
+                    response.append((char) b);
+
+                byteReaded = is.read(buffer);
+            }
             myResponse.setBody(response.toString());
+
+            is.close();
+
+            if (os != null)
+                os.close();
+
         } catch (IOException e) {
 //            e.printStackTrace();
             System.err.println("Impossible to save response.");

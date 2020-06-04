@@ -2,7 +2,7 @@ import java.io.IOException;
 
 public class Run {
 
-    public Run (String[] string) {
+    public Run(String[] string) {
 
         Request requestInformation = new Request();
         Response responseInformation = new Response();
@@ -10,12 +10,17 @@ public class Run {
 
         String[] headers = null;
         String[] body = null;
-        for(int j = 0; j < string.length; j++) {
+        boolean saveResponseFlag = false;
+
+        for (int j = 0; j < string.length; j++) {
 
             if (string[j].equals("-h") || string[j].equals("--help")) {
                 printHelp();
                 System.exit(0);
             }
+
+            if (string[j].equals("-i"))
+                requestInformation.setShowHeaderResponse(true);
 
             if (string[j].equals("-u") || string[j].equals("--url"))
                 requestInformation.setUrl(string[j + 1]);
@@ -33,7 +38,12 @@ public class Run {
 
             if (string[j].equals("--upload")) {
                 requestInformation.setBodyMethod("--upload");
-                requestInformation.setFileAddress(string[j + 1]);
+                requestInformation.setFileLoadAddress(string[j + 1]);
+            }
+
+            if (string[j].equals("-O") || string[j].equals("--output")) {
+                requestInformation.setResponseFileAddress(string[j + 1]);
+                saveResponseFlag = true;
             }
         }
 
@@ -48,26 +58,21 @@ public class Run {
             System.err.println("Error");
         }
 
-        // set headers if needed
-        boolean headerFlag = false;
-        for(String str: string)
-            if (str.equals("-i")) {
-                headerFlag = true;
-                break;
-            }
-
-        responseInformation.print(headerFlag);
-
+        responseInformation.print(requestInformation.isShowHeaderResponse());
+        if (saveResponseFlag)
+            System.out.println("\nresponse body saved in entered path...");
     }
 
-    public void printHelp(){
+    public void printHelp() {
 
         System.out.println("Help ");
-        System.out.println("u <> , --url <> \t : set url");
-        System.out.println("M <> , --method <> \t : set method");
-        System.out.println("H <> , --header <> \t : set headers \t [--header \"key1:value1&key2:value2\"]");
-        System.out.println("d <> , --data <> \t : set message body in form-data \t [--data \"key1:value1&key2:value2\"]]");
+        System.out.println("-u <>, --url <> \t : set url \t ");
+        System.out.println("-i   , \t\t\t\t : show response headers");
+        System.out.println("-M <>, --method <> \t : set method \t [--method GET]");
+        System.out.println("-H <>, --header <> \t : set headers \t [--header \"key1:value1&key2:value2\"]");
+        System.out.println("-d <>, --data <> \t : set message body in form-data \t [--data \"key1:value1&key2:value2\"]]");
         System.out.println("\t , --upload <> \t : set message body with uploaded file \t [--upload E:\\MidTermTest\\note.txt]");
+        System.out.println("-O <>, --output <> \t : save response body in entered file \t [--output E:\\MidTermTest\\note.png]]");
 
     }
 }

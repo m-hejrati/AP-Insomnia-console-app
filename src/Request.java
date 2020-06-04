@@ -5,7 +5,10 @@ public class Request {
     private String[] headers;
     private String bodyMethod;
     private String[] body;
-    private String fileAddress;
+    private String fileLoadAddress;
+    private boolean showHeaderResponse;
+    private String responseFileAddress;
+
 
     public Request(){
 
@@ -13,7 +16,8 @@ public class Request {
         headers = null;
         body = null;
         bodyMethod = null;
-        fileAddress = null;
+        fileLoadAddress = null;
+        responseFileAddress = null;
 
     }
 
@@ -37,8 +41,16 @@ public class Request {
         this.bodyMethod = bodyMethod;
     }
 
-    public void setFileAddress(String fileAddress) {
-        this.fileAddress = fileAddress;
+    public void setFileLoadAddress(String fileLoadAddress) {
+        this.fileLoadAddress = fileLoadAddress;
+    }
+
+    public void setShowHeaderResponse(boolean showHeaderResponse) {
+        this.showHeaderResponse = showHeaderResponse;
+    }
+
+    public void setResponseFileAddress(String responseFileAddress) {
+        this.responseFileAddress = responseFileAddress;
     }
 
     public String getUrl() {
@@ -61,7 +73,15 @@ public class Request {
         return bodyMethod;
     }
 
-    public String getFileAddress() {
-        return fileAddress;
+    public String getFileLoadAddress() {
+        return fileLoadAddress;
+    }
+
+    public boolean isShowHeaderResponse() {
+        return showHeaderResponse;
+    }
+
+    public String getResponseFileAddress() {
+        return responseFileAddress;
     }
 }
