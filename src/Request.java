@@ -1,4 +1,6 @@
-public class Request {
+import java.io.Serializable;
+
+public class Request implements Serializable {
 
     private String url;
     private String method;
@@ -83,5 +85,15 @@ public class Request {
 
     public String getResponseFileAddress() {
         return responseFileAddress;
+    }
+
+    public void print(){
+        System.out.print(" | url: " + url);
+        System.out.print(" | method: " + method);
+        System.out.print(" | body method: " + bodyMethod);
+        System.out.print(" | body: " + body);
+
+        System.out.println();
+
     }
 }
