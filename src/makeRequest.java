@@ -32,12 +32,17 @@ public class makeRequest {
 //            e.printStackTrace();
             System.err.println("Impossible to make connection");
         }
-        if (myRequest.getHeaders() != null)
-            for (String header : myRequest.getHeaders()) {
+
+
+        if (myRequest.getHeaders() != null) {
+
+            String[] headers = myRequest.getHeaders().split("&");
+
+            for (String header : headers) {
                 String[] head = header.split(":");
                 connection.setRequestProperty(head[0], head[1]);
             }
-
+        }
 
         Response myResponse = new Response();
 
@@ -136,24 +141,22 @@ public class makeRequest {
                 os.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
-//            System.err.println("Impossible to save response.");
+//            e.printStackTrace();
+            System.err.println("Impossible to save response.");
         }
 
     }
 
-    public void sendFormData(HttpURLConnection connection, String[] body) {
+    public void sendFormData(HttpURLConnection connection, String bodies) {
+
+        String[] body = bodies.split("&");
+
 
         HashMap<String, String> fooBody = new HashMap<>();
         for (String bod : body) {
             String[] bo = bod.split(":");
             fooBody.put(bo[0], bo[1]);
         }
-//        HashMap<String, String> fooBody = new HashMap<>();
-//        fooBody.put("name", "hadi");
-//        fooBody.put("lastName", "tabatabaei");
-////        fooBody.put("file", "pic2.png");
-////        fooBody.put("file2", "result.png");
 
         try {
 

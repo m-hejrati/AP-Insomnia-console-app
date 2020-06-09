@@ -4,9 +4,9 @@ public class Request implements Serializable {
 
     private String url;
     private String method;
-    private String[] headers;
+    private String headers;
     private String bodyMethod;
-    private String[] body;
+    private String body;
     private String fileLoadAddress;
     private boolean showHeaderResponse;
     private String responseFileAddress;
@@ -31,11 +31,11 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public void setBody(String[] body) {
+    public void setBody(String body) {
         this.body = body;
     }
 
-    public void setHeaders(String[] headers) {
+    public void setHeaders(String headers) {
         this.headers = headers;
     }
 
@@ -63,11 +63,11 @@ public class Request implements Serializable {
         return method;
     }
 
-    public String[] getBody() {
+    public String getBody() {
         return body;
     }
 
-    public String[] getHeaders() {
+    public String getHeaders() {
         return headers;
     }
 
@@ -92,7 +92,6 @@ public class Request implements Serializable {
         System.out.print(" | method: " + method);
         System.out.print(" | body method: " + bodyMethod);
         System.out.print(" | body: " + body);
-
         System.out.println();
 
     }

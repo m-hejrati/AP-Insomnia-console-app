@@ -1,29 +1,33 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Run {
 
     public Run(String[] string) {
 
-        Request requestInformation = new Request();
+        ArrayList<Request> requestinformation;
         Response responseInformation = new Response();
         makeRequest myMakeRequest = new makeRequest();
-//        Save save = new Save();
 
         // analyze input
         InputAnalyzer inputAnalyzer = new InputAnalyzer();
-        requestInformation = inputAnalyzer.analyze(string);
+        requestinformation = inputAnalyzer.analyze(string);
 
-        // send req
-        try {
-            responseInformation = myMakeRequest.makeReq(requestInformation);
-        } catch (IOException e) {
+        for (Request request : requestinformation) {
+
+            // send req
+            try {
+                responseInformation = myMakeRequest.makeReq(request);
+            } catch (IOException e) {
 //            e.printStackTrace();
-            System.err.println("Error");
-        }
+                System.err.println("Error");
+            }
 
-        responseInformation.print(requestInformation.isShowHeaderResponse());
+            responseInformation.print(request.isShowHeaderResponse());
+
 //        if (saveResponseFlag)
 //            System.out.println("\nresponse body saved in entered path...");
-    }
 
+        }
+    }
 }

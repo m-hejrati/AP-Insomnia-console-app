@@ -51,5 +51,6 @@ public class Response {
         System.out.println("Body: \t\t " + body);
         if (headerFlag)
             System.out.println("Headers: \t " + headers);
+        System.out.println();
     }
 }

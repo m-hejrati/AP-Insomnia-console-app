@@ -1,16 +1,16 @@
+import java.util.ArrayList;
+
 public class InputAnalyzer {
 
+    public InputAnalyzer(){
 
-    public Request analyze(String[] string) {
+    }
+
+    public ArrayList<Request> analyze(String[] string) {
 
         Request requestInformation = new Request();
-
+        ArrayList<Request> requestInfo = new ArrayList<Request>();
         Save save = new Save();
-
-
-        String[] headers = null;
-        String[] body = null;
-//        boolean saveResponseFlag = false;
 
         for (int j = 0; j < string.length; j++) {
 
@@ -29,11 +29,11 @@ public class InputAnalyzer {
                 requestInformation.setMethod(string[j + 1]);
 
             if (string[j].equals("-H") || string[j].equals("--headers"))
-                headers = string[j + 1].split("&");
+                requestInformation.setHeaders(string[j + 1]);
 
             if (string[j].equals("-d") || string[j].equals("--data")) {
                 requestInformation.setBodyMethod("--data");
-                body = string[j + 1].split("&");
+                requestInformation.setBody(string[j + 1]);
             }
 
             if (string[j].equals("--upload")) {
@@ -46,16 +46,10 @@ public class InputAnalyzer {
                     requestInformation.setResponseFileAddress("-");
                 else
                     requestInformation.setResponseFileAddress(string[j + 1]);
-//                saveResponseFlag = true;
             }
 
             if (string[j].equals("--create")) {
                 save.createGroup(string[j + 1]);
-                System.exit(0);
-            }
-
-            if (string[j].equals("-S") || string[j].equals("--save")) {
-                save.save(string[j + 1], string[j + 2], requestInformation);
                 System.exit(0);
             }
 
@@ -68,16 +62,25 @@ public class InputAnalyzer {
             }
 
             if (string[j].equals("--fire")) {
-                System.out.println("nothing yet");
+
+                int i = 0;
+                while (string.length != j + 2 + i) {
+                    if (string[j + 2 + i].charAt(0) != '-') {
+                        requestInformation = save.fire(string[j + 1], string[j + 2 + i]);
+                        requestInfo.add(requestInformation);
+                    }
+                    i++;
+                }
+                return requestInfo;
             }
         }
 
-        if (headers != null)
-            requestInformation.setHeaders(headers);
-        if (body != null)
-            requestInformation.setBody(body);
+        for (int j = 0; j < string.length; j++)
+            if (string[j].equals("-S") || string[j].equals("--save"))
+                save.save(string[j + 1], string[j + 2], requestInformation);
 
-        return requestInformation;
+        requestInfo.add(requestInformation);
+        return requestInfo;
     }
 
 
@@ -97,6 +100,5 @@ public class InputAnalyzer {
         System.out.println("     , --list <> \t : show saved requests in the group \t ,[--list group1]" +
                 "\n \t\t\t\t\t   if you not enter group request name, it will show all the groups");
         System.out.println("     , --fire <> \t : send a saved request from a group\t ,[--fire group1 req1]");
-
     }
 }

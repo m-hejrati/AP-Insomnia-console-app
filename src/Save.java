@@ -1,10 +1,10 @@
-import javax.swing.*;
+import javax.xml.parsers.SAXParser;
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class Save {
 
+    public Save(){
+
+    }
 
     public void save(String name, String group, Request requestInformation) {
 
@@ -12,10 +12,10 @@ public class Save {
 
         if (new File(path).exists()) {
             try {
-                File file = new File(path + "/" + name + ".ser");
+                File file = new File(path + "/" + name);
                 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
                 out.writeObject(requestInformation);
-                System.out.println("saved");
+                System.out.println("Request saved.");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -55,7 +55,6 @@ public class Save {
                 System.out.println("there is not any group for requests");
         }
 
-
     }
 
     public Request load(String fileAddress) {
@@ -81,6 +80,20 @@ public class Save {
         boolean isSuccessful = new File(path).mkdirs();
         System.out.println("Creating directory is successful: " + isSuccessful);
 
+    }
+
+    public Request fire(String group, String name){
+
+        Request requestInformation = new Request();
+        String path = "requests/" + group;
+
+        if (new File(path).exists()) {
+            requestInformation = load(path + "/" + name);
+
+        } else
+            System.err.println("there is no group with this name to fire");
+
+        return requestInformation;
     }
 
 }
