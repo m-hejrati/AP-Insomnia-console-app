@@ -1,16 +1,26 @@
-import javax.xml.parsers.SAXParser;
 import java.io.*;
+
+/**
+ * this class do all the operation about save; like save, load, list, fire.
+ *
+ * @author Mahdi Hejarti 9723100
+ * @since 2020.05.29
+ */
+
 public class Save {
 
-    public Save(){
-
-    }
-
+    /**
+     * save a request with entered name in entered group.
+     * @param name name of request to save
+     * @param group group of request to save
+     * @param requestInformation information of request
+     */
     public void save(String name, String group, Request requestInformation) {
 
         String path = "requests/" + group;
 
         if (new File(path).exists()) {
+
             try {
                 File file = new File(path + "/" + name);
                 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
@@ -18,18 +28,23 @@ public class Save {
                 System.out.println("Request saved.");
 
             } catch (IOException e) {
-                e.printStackTrace();
                 System.err.println("Impossible to save request");
             }
+
         } else
-            System.err.println("there is no group with this name to save");
+            System.err.println("There is no group with this name to save, please create group first");
     }
 
+    /**
+     * show list of saved group and requests in them
+     * @param group name of group to show its requests
+     */
     public void list(String group) {
 
         if (group.charAt(0) != '-') {
 
             String path = "requests/" + group;
+
             if (new File(path).exists()) {
 
                 File[] files = new File(path).listFiles();
@@ -43,7 +58,7 @@ public class Save {
                 }
 
             } else
-                System.err.println("there is no group with this name to load");
+                System.err.println("There is no group with this name to load");
 
         } else {
 
@@ -54,9 +69,13 @@ public class Save {
             } else
                 System.out.println("there is not any group for requests");
         }
-
     }
 
+    /**
+     * read requests from file
+     * @param fileAddress address of file
+     * @return loaded request
+     */
     public Request load(String fileAddress) {
 
         Request requestInformation = new Request();
@@ -67,21 +86,30 @@ public class Save {
             requestInformation = (Request) in.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             System.err.println("Impossible to load request");
         }
 
         return requestInformation;
     }
 
-    public void createGroup(String str) {
+    /**
+     * create new group for saving request.
+     * @param group name of group
+     */
+    public void createGroup(String group) {
 
-        String path = "requests/" + str;
+        String path = "requests/" + group;
         boolean isSuccessful = new File(path).mkdirs();
         System.out.println("Creating directory is successful: " + isSuccessful);
 
     }
 
+    /**
+     * make request from saved information.
+     * @param group name of group
+     * @param name name of saved request
+     * @return request information
+     */
     public Request fire(String group, String name){
 
         Request requestInformation = new Request();
@@ -91,7 +119,7 @@ public class Save {
             requestInformation = load(path + "/" + name);
 
         } else
-            System.err.println("there is no group with this name to fire");
+            System.err.println("There is no group with this name to fire");
 
         return requestInformation;
     }

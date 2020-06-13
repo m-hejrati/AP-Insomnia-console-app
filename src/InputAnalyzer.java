@@ -1,11 +1,19 @@
 import java.util.ArrayList;
 
+/**
+ * this class get the entered argument and analyze it, and then do needed work.
+ *
+ * @author Mahdi Hejarti 9723100
+ * @since 2020.05.29
+ */
+
 public class InputAnalyzer {
 
-    public InputAnalyzer(){
-
-    }
-
+    /**
+     * the most important method of this class that do all the thing
+     * @param string entered argument
+     * @return information of the request
+     */
     public ArrayList<Request> analyze(String[] string) {
 
         Request requestInformation = new Request();
@@ -62,7 +70,6 @@ public class InputAnalyzer {
             }
 
             if (string[j].equals("--fire")) {
-
                 int i = 0;
                 while (string.length != j + 2 + i) {
                     if (string[j + 2 + i].charAt(0) != '-') {
@@ -73,6 +80,7 @@ public class InputAnalyzer {
                 }
                 return requestInfo;
             }
+
         }
 
         for (int j = 0; j < string.length; j++)
@@ -84,14 +92,17 @@ public class InputAnalyzer {
     }
 
 
+    /**
+     * this class just print help information
+     */
     public void printHelp() {
 
         System.out.println("Help ");
         System.out.println("-u <>, --url <> \t : set url \t\t\t\t\t\t\t\t ,[--url http://www.google.com]");
         System.out.println("-i   , \t\t\t\t : show response headers");
         System.out.println("-M <>, --method <> \t : set method \t\t\t\t\t\t\t ,[--method GET]");
-        System.out.println("-H <>, --header <> \t : set headers \t\t\t\t\t\t\t ,[--header \"key1:value1&key2:value2\"]");
-        System.out.println("-d <>, --data <> \t : set message body in form-data \t\t ,[--data \"key1:value1&key2:value2\"]");
+        System.out.println("-H <>, --header <> \t : set headers \t\t\t\t\t\t\t ,[--header \"key1:value1;key2:value2\"]");
+        System.out.println("-d <>, --data <> \t : set message body in form-data \t\t ,[--data \"key1=value1&key2=value2\"]");
         System.out.println("     , --upload <> \t : set message body with uploaded file \t ,[--upload E:\\MidTermTest\\note.txt]");
         System.out.println("-O <>, --output <> \t : save response body in entered file \t ,[--output E:\\MidTermTest\\note.png]" +
                 "\n \t\t\t\t\t   if you not enter file name, it will save in file with default name");
